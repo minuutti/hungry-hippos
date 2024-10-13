@@ -5,9 +5,9 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+        <h1>Hungry Hippos</h1>
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          Gotta eat something
         </p>
         <a
           className="App-link"

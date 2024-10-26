@@ -11,3 +11,205 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+/*------GENERAL--------*/
+
+body{
+  background-color: #F8F8F2;
+}
+
+body{
+  font-family: "Inter", serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+  color: #201D1D;
+}
+
+a{
+  text-decoration: none;
+}
+
+h1, h2, h3, h4{
+  color: #201D1D;
+}
+
+p{
+  color: #201D1D;
+}
+
+
+
+
+#ListHeader{
+
+}
+
+#ContentWrapper{
+margin: 0;
+padding: 0;
+display: flex;
+justify-content: center;
+}
+
+#RecipeListContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+#RecipeListContainer{
+  width: 100%;
+  max-width: 520px;
+  padding: 0 2em;
+}
+
+#RecipeContainer{
+  width: 100%;
+  max-width: 520px;
+  padding: 0 2em;
+}
+
+#RecipeListContainer ul{
+  margin: 0;
+  padding: 0;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+
+}
+#RecipeListContainer ul li{
+  padding: 0 0 0 0;
+  margin-bottom: 1em;
+}
+.recipe-container{
+  display: flex;
+  flex-direction: row;
+  background-color: #fff;
+  border-radius: 20px;
+  padding: 1rem 0.5rem 1rem 1rem;
+  transition: 
+  box-shadow 0.3s ease,      /* Smooth animation for box-shadow */
+  transform 0.3s ease;       /* Smooth animation for transform (scale) */
+}
+
+.recipe-container a{
+  display: flex;
+  flex: 1;
+  gap: 1em;
+}
+
+.recipe-container h3{
+  
+}
+.recipe-container:hover{
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+  transform: scale(1.02); /* Slightly scale down on press to simulate button press */
+}
+
+.recipe-container:active{
+  box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
+  transform: scale(0.98); /* Slightly scale down on press to simulate button press */
+}
+
+.previewImageContainer{
+  width: 120px;
+  height: 120px;
+  border-radius: 25px;
+  background-color: beige;
+  overflow: hidden;
+  transition: transform 0.3s ease; /* Smooth transition for rotation */
+
+}
+
+.recipe-container:hover .previewImageContainer {
+  transform: rotate(-3deg); /* Rotate the div slightly counter-clockwise */
+}
+
+.previewImageContainer img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.RecipeItemInfoContainer{
+  flex: 1;
+}
+
+
+#RecipeListContainer li{
+  list-style: none;
+  padding: 1em;
+}
+
+
+/* src/styles/Reseptit.css */
+.favorite-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.favorite-btn img {
+  width: 32px; /* Adjust size as needed */
+  height: 32px;
+}
+
+
+
+
+
+/*----- Single Resepti ---------*/
+
+.recipeImageContainer img{
+  width: 100%;
+}
+
+
+
+/*----- Menu ---------*/
+
+
+.floating-menu {
+  position: fixed;
+  bottom: 20px;
+  right: 0;
+
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  width: 100%;
+}
+
+.floatingMenuContent{
+  max-width: 540px;
+  width: 100%;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.menu-link {
+  color: #333;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 5px;
+  position: relative;
+}
+
+.menu-link:hover {
+  color: #007BFF;
+}
+
+.badge {
+  background-color: #FF0000;
+  color: white;
+  border-radius: 12px;
+  padding: 3px 7px;
+  font-size: 12px;
+  position: absolute;
+  top: -5px;
+  right: -10px;
+}

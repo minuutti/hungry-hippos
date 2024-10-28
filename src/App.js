@@ -11,6 +11,17 @@ function App() {
   const [isLoading, setIsLoading] = useState(true); // State for loading
 
   useEffect(() => {
+    fetch('/reseptit.json')
+        .then(response => response.json())
+        .then(data => {
+            setRecipes(data);
+            // Store all recipes in local storage for easier access in favorites
+            localStorage.setItem('allRecipes', JSON.stringify(data));
+        })
+        .catch(error => console.error('Error fetching recipes:', error));
+}, []);
+
+  useEffect(() => {
     const fetchRecipes = async () => {
       try {
         const response = await fetch('/reseptit.json');

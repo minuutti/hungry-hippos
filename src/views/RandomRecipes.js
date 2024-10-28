@@ -1,82 +1,93 @@
+// src/views/RandomRecipes.js
 import React, { useState, useEffect } from 'react';
+import RecipeItem from '../components/RecipeItem'; // Import the RecipeItem component
 
-function RandomRecipes({ recipes = [] }) { // Default to an empty array if recipes is undefined
-  const [randomRecipes, setRandomRecipes] = useState([]);
-  const [itemsToPurchase, setItemsToPurchase] = useState([]);
+function RandomRecipes() {
+    const [randomRecipes, setRandomRecipes] = useState([]);
+    const [itemsToPurchase, setItemsToPurchase] = useState([]);
+    const [favoriteRecipeIds, setFavoriteRecipeIds] = useState([]);
 
-  useEffect(() => {
-    // Load saved random recipes and items to purchase from local storage on component mount
-    const savedRandomRecipes = localStorage.getItem('randomRecipes');
-    const savedItemsToPurchase = localStorage.getItem('itemsToPurchase');
+    // Load saved random recipes and favorite IDs from local storage on component mount
+    useEffect(() => {
+        const savedRandomRecipes = JSON.parse(localStorage.getItem('randomRecipes')) || [];
+        const savedFavoriteIds = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
+        const savedItemsToPurchase = JSON.parse(localStorage.getItem('itemsToPurchase')) || [];
 
-    if (savedRandomRecipes) {
-      setRandomRecipes(JSON.parse(savedRandomRecipes));
-    }
+        setRandomRecipes(savedRandomRecipes);
+        setFavoriteRecipeIds(savedFavoriteIds);
+        setItemsToPurchase(savedItemsToPurchase);
+    }, []);
 
-    if (savedItemsToPurchase) {
-      setItemsToPurchase(JSON.parse(savedItemsToPurchase));
-    }
-  }, []);
+    // Function to pick three random recipes
+    const pickRandomRecipes = () => {
+        const allRecipes = JSON.parse(localStorage.getItem('allRecipes')) || []; // Fetch all recipes from local storage
 
-  const pickRandomRecipes = () => {
-    if (!Array.isArray(recipes) || recipes.length === 0) {
-      console.error("Recipes prop is not an array or is empty");
-      return; // Exit if recipes is not an array or is empty
-    }
+        const shuffled = [...allRecipes].sort(() => 0.5 - Math.random());
+        const selectedRecipes = shuffled.slice(0, 3);
 
-    const shuffled = [...recipes].sort(() => 0.5 - Math.random());
-    const selectedRecipes = shuffled.slice(0, 3);
-    setRandomRecipes(selectedRecipes);
+        setRandomRecipes(selectedRecipes);
 
-    const items = selectedRecipes.flatMap(recipe => 
-      recipe.Ostettava ? recipe.Ostettava.split(',').map(item => item.trim()) : []
+        const items = selectedRecipes.flatMap(recipe =>
+            recipe.Ostettava ? recipe.Ostettava.split(',').map(item => item.trim()) : []
+        );
+        setItemsToPurchase(items);
+
+        // Save selected recipes and items to local storage
+        localStorage.setItem('randomRecipes', JSON.stringify(selectedRecipes));
+        localStorage.setItem('itemsToPurchase', JSON.stringify(items));
+    };
+
+    // Check if a recipe is a favorite based on its ID
+    const isFavorite = (id) => {
+        return favoriteRecipeIds.includes(id);
+    };
+
+    // Toggle the favorite status for a recipe
+    const toggleFavorite = (recipeID) => {
+        let updatedFavorites;
+        if (isFavorite(recipeID)) {
+            updatedFavorites = favoriteRecipeIds.filter(id => id !== recipeID);
+        } else {
+            updatedFavorites = [...favoriteRecipeIds, recipeID];
+        }
+
+        setFavoriteRecipeIds(updatedFavorites);
+        localStorage.setItem('favoriteRecipes', JSON.stringify(updatedFavorites));
+    };
+
+    return (
+        <div id="ContentWrapper">
+            <div id="RecipeListContainer">
+                <div class="ListtHeader">
+                    <div class="TitleAndAction">
+                        <h2>Hippo lista</h2>
+                        <button onClick={pickRandomRecipes} class="bigButton">Luo uusi lista</button>
+                    </div>
+                </div>
+                {randomRecipes.length > 0 && (
+                    <>
+                        <ul>
+                            {randomRecipes.map((recipe) => (
+                                <RecipeItem
+                                    key={recipe.ID}
+                                    recipe={recipe}
+                                    isFavorite={isFavorite}
+                                    toggleFavorite={toggleFavorite}
+                                />
+                            ))}
+                        </ul>
+
+                        <h3>Näitä pittäis ostaa</h3>
+                        <ul>
+                            {itemsToPurchase.map((item, index) => (
+                                <li key={index}>{item}</li>
+                            ))}
+                        </ul>
+                    </>
+                )}
+            </div>
+        </div>
     );
-    setItemsToPurchase(items);
-
-    // Save selected recipes and items to local storage
-    localStorage.setItem('randomRecipes', JSON.stringify(selectedRecipes));
-    localStorage.setItem('itemsToPurchase', JSON.stringify(items));
-  };
-
-  return (
-    <div id="ContentWrapper">
-      <div id="RecipeListContainer">
-        <h2>Random Recipes</h2>
-        <button onClick={pickRandomRecipes}>Pick Three Random Recipes</button>
-        <a href="../">Back to List</a>
-
-        {randomRecipes.length > 0 && (
-          <>
-            <h3>Selected Recipes</h3>
-            <ul>
-              {randomRecipes.map((recipe, index) => (
-                <li key={index}>
-                  <div className="recipe-container">
-                    <a href={`/resepti/${recipe.ID}`}>
-                      <div className="previewImageContainer">
-                        <img src={recipe.Kuva} alt={recipe.Nimi} />
-                      </div>
-                      <div className="RecipeItemInfoContainer">
-                        <h3>{recipe.Nimi}</h3>
-                        <p>{recipe.Tyyppi}, {recipe.Tarkenne}</p>
-                      </div>
-                    </a>
-                  </div>
-                </li>
-              ))}
-            </ul>
-
-            <h3>Items to Purchase</h3>
-            <ul>
-              {itemsToPurchase.map((item, index) => (
-                <li key={index}>{item}</li>
-              ))}
-            </ul>
-          </>
-        )}
-      </div>
-    </div>
-  );
 }
 
 export default RandomRecipes;

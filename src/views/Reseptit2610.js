@@ -1,7 +1,6 @@
 // src/views/Reseptit.js
 import React, { useEffect, useState } from 'react';
 import RecipeItem from '../components/RecipeItem'; // Adjust the path based on your folder structure
-import hippoIcon from '../assets/hippoIcon.svg';
 
 
 function Reseptit() {
@@ -64,22 +63,35 @@ function Reseptit() {
     return (
         <div id="ContentWrapper">
             <div id="RecipeListContainer">
-                <div class="ListtHeader">
-                    <h2>Safkat</h2>
+                <div id="ListHeader">
+                    <h2>Hipoille safkaa</h2>
                 </div>
                 <ul>
-                {visibleRecipes.map((recipe) => (
-                        <RecipeItem
-                            key={recipe.ID}
-                            recipe={recipe}
-                            isFavorite={isFavorite}
-                            toggleFavorite={toggleFavorite}
-                        />
+                    {visibleRecipes.map((recipe, index) => (
+                        <li key={index}>
+                            <div className="recipe-container">
+                                <a href={`/resepti/${recipe.ID}`}>
+                                    <div className="previewImageContainer">
+                                        <img src={recipe.Kuva} alt={recipe.Nimi} />
+                                    </div>
+                                    <div className="RecipeItemInfoContainer">
+                                        <h3>{recipe.Nimi}</h3>
+                                        <p>{recipe.Tyyppi}, {recipe.Tarkenne}</p>
+                                    </div>
+                                </a>
+                                <div className="favContainer">
+                                    <button className="favorite-btn" onClick={() => toggleFavorite(recipe.ID)}>
+                                        <img
+                                            src={isFavorite(recipe.ID) ? '/assets/activeFav.svg' : '/assets/defaultFav.svg'}
+                                            alt={isFavorite(recipe.ID) ? 'Remove from favorites' : 'Add to favorites'}
+                                        />
+                                    </button>
+                                </div>
+                            </div>
+                        </li>
                     ))}
                 </ul>
-
             </div>
-
         </div>
     );
 }
